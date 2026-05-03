@@ -18,3 +18,13 @@ export interface Incident {
   type: "leve" | "grave";
   confirmedAt: string; // ISO 8601
 }
+
+export interface StoppedVehicle {
+  vehicleId: string;
+  lat: number;
+  lng: number;
+  /** seconds the vehicle has been stopped */
+  duration: number;
+  /** timestamp when stop was first detected */
+  detectedAt: number;
+}

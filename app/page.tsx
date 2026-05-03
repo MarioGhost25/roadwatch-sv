@@ -2,6 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { MapSlot } from "@/components/layout/MapSlot";
+import { StoppedVehicleAlert } from "@/components/alerts/StoppedVehicleAlert";
+import { AccidentFlow } from "@/components/alerts/AccidentFlow";
+import { useVehicleMonitor } from "@/hooks/useVehicleMonitor";
 import type { Vehicle, Incident } from "@/components/map/types";
 
 /* ─── Disable SSR for the map (requires window / Google Maps JS API) ── */
@@ -27,35 +30,24 @@ const MOCK_VEHICLES: Vehicle[] = [
 ];
 
 const MOCK_INCIDENTS: Incident[] = [
-  {
-    id: "inc-001",
-    lat: 13.6942,
-    lng: -89.2195,
-    type: "grave",
-    confirmedAt: "2024-03-15T14:32:00Z",
-  },
-  {
-    id: "inc-002",
-    lat: 13.6888,
-    lng: -89.2080,
-    type: "leve",
-    confirmedAt: "2024-03-15T14:18:00Z",
-  },
-  {
-    id: "inc-003",
-    lat: 13.7005,
-    lng: -89.2170,
-    type: "leve",
-    confirmedAt: "2024-03-15T13:55:00Z",
-  },
+  { id: "inc-001", lat: 13.6942, lng: -89.2195, type: "grave", confirmedAt: "2024-03-15T14:32:00Z" },
+  { id: "inc-002", lat: 13.6888, lng: -89.2080, type: "leve",  confirmedAt: "2024-03-15T14:18:00Z" },
+  { id: "inc-003", lat: 13.7005, lng: -89.2170, type: "leve",  confirmedAt: "2024-03-15T13:55:00Z" },
 ];
 
 /* ─── Page ───────────────────────────────────────────────────────────── */
 
-export default function HomePage() {
+function MapPage() {
+  // Monitor runs the stop-detection loop and pushes alerts to Zustand
+  useVehicleMonitor(MOCK_VEHICLES);
+
   return (
     <MapSlot>
       <TrafficMap vehicles={MOCK_VEHICLES} incidents={MOCK_INCIDENTS} />
+      <StoppedVehicleAlert />
+      <AccidentFlow />
     </MapSlot>
   );
 }
+
+export default MapPage;
