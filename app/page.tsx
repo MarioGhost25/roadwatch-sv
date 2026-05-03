@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import { MapSlot } from "@/components/layout/MapSlot";
 import type { Vehicle, Incident } from "@/components/map/types";
