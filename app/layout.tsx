@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
-import { Topbar } from "@/components/layout/Topbar";
-import { Sidebar } from "@/components/layout/Sidebar";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -42,12 +40,8 @@ export default function RootLayout({
       lang="es"
       className={`${dmSans.variable} ${jetbrainsMono.variable} bg-bg-base antialiased`}
     >
-      <body className="font-sans text-text-primary overflow-hidden">
-        <div className="app-shell">
-          <Topbar />
-          {children}
-          <Sidebar />
-        </div>
+      <body className="font-sans text-text-primary">
+        {children}
       </body>
     </html>
   );
