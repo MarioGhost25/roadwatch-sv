@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/Badge";
+import { useTrafficPanelStore } from "@/store/trafficPanelStore";
 
 /* ─── Logo ───────────────────────────────────────────────────────────── */
 
@@ -145,9 +146,34 @@ function NotificationBell({ count = 0 }: NotificationBellProps): ReactNode {
   );
 }
 
+/* ─── Analytics Toggle Button ────────────────────────────────────────── */
+
+function AnalyticsButton({ active, onClick }: { active: boolean; onClick: () => void }): ReactNode {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Abrir panel de análisis de tráfico"
+      aria-pressed={active}
+      className={[
+        "w-8 h-8 rounded-[6px] border-thin flex items-center justify-center transition-colors cursor-pointer",
+        active
+          ? "bg-traffic-green-tint border-traffic-green/30 text-traffic-green"
+          : "border-border-default bg-bg-surface text-text-secondary hover:border-border-strong hover:text-text-primary",
+      ].join(" ")}
+    >
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M1 11h3v4H1v-4Zm5-5h3v9H6V6Zm5-5h3v14h-3V1Z" />
+      </svg>
+    </button>
+  );
+}
+
 /* ─── Topbar ─────────────────────────────────────────────────────────── */
 
 export function Topbar(): ReactNode {
+  const { open, toggle } = useTrafficPanelStore();
+
   return (
     <header
       className="h-[52px] shrink-0 flex items-center px-4 gap-4 border-b border-thin border-border-subtle bg-bg-surface"
@@ -171,6 +197,7 @@ export function Topbar(): ReactNode {
 
       {/* Right: Actions */}
       <div className="flex items-center gap-2 ml-auto shrink-0">
+        <AnalyticsButton active={open} onClick={toggle} />
         <NotificationBell count={3} />
         <UserAvatar />
       </div>

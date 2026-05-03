@@ -4,7 +4,9 @@ import dynamic from "next/dynamic";
 import { MapSlot } from "@/components/layout/MapSlot";
 import { StoppedVehicleAlert } from "@/components/alerts/StoppedVehicleAlert";
 import { AccidentFlow } from "@/components/alerts/AccidentFlow";
+import { TrafficPanel } from "@/components/analytics/TrafficPanel";
 import { useVehicleMonitor } from "@/hooks/useVehicleMonitor";
+import { useTrafficPanelStore } from "@/store/trafficPanelStore";
 import type { Vehicle, Incident } from "@/components/map/types";
 
 /* ─── Disable SSR for the map (requires window / Google Maps JS API) ── */
@@ -41,11 +43,14 @@ function MapPage() {
   // Monitor runs the stop-detection loop and pushes alerts to Zustand
   useVehicleMonitor(MOCK_VEHICLES);
 
+  const { open, close } = useTrafficPanelStore();
+
   return (
     <MapSlot>
       <TrafficMap vehicles={MOCK_VEHICLES} incidents={MOCK_INCIDENTS} />
       <StoppedVehicleAlert />
       <AccidentFlow />
+      <TrafficPanel open={open} onClose={close} />
     </MapSlot>
   );
 }
