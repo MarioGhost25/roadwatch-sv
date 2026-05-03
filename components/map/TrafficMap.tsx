@@ -3,9 +3,10 @@
 import {
   APIProvider,
   Map,
-  useTrafficLayer,
+  useMap,
+  useMapsLibrary,
 } from "@vis.gl/react-google-maps";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { VehicleMarker } from "./VehicleMarker";
 import { IncidentMarker } from "./IncidentMarker";
 import type { Vehicle, Incident } from "./types";
@@ -58,7 +59,16 @@ const MAP_STYLES: google.maps.MapTypeStyle[] = [
 /* ─── Traffic layer activator (hook-based, must be inside <Map>) ───── */
 
 function TrafficLayer(): null {
-  useTrafficLayer();
+  const map = useMap();
+  const mapsLib = useMapsLibrary("maps");
+
+  useEffect(() => {
+    if (!map || !mapsLib) return;
+    const trafficLayer = new mapsLib.TrafficLayer();
+    trafficLayer.setMap(map);
+    return () => trafficLayer.setMap(null);
+  }, [map, mapsLib]);
+
   return null;
 }
 
