@@ -13,6 +13,17 @@ import type { Vehicle, Incident } from "./types";
 
 export type { Vehicle, Incident };
 
+/* ─── Environment ────────────────────────────────────────────────────── */
+
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
+
+if (!GOOGLE_MAPS_API_KEY && typeof window !== "undefined") {
+  console.warn(
+    "[VialidadSV] NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not set. " +
+    "Add it to your .env.local file or Vercel project environment variables."
+  );
+}
+
 /* ─── Constants ──────────────────────────────────────────────────────── */
 
 const CENTER = { lat: 13.6929, lng: -89.2182 };
@@ -108,10 +119,8 @@ export function TrafficMap({
   vehicles = [],
   incidents = [],
 }: TrafficMapProps): ReactNode {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
-
   return (
-    <APIProvider apiKey={apiKey}>
+    <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
       <Map
         style={{ width: "100%", height: "100%" }}
         defaultCenter={CENTER}
