@@ -174,3 +174,34 @@ p {
   outline: 2px solid var(--color-traffic-green);
   outline-offset: 2px;
 }
+
+/* ─── App Shell Grid ─────────────────────────────────────────────────── */
+/*
+  Desktop:
+    [ topbar  topbar ]
+    [ map     sidebar ]
+
+  Mobile (md breakpoint collapses sidebar to bottom sheet):
+    [ topbar ]
+    [ map    ]
+*/
+.app-shell {
+  display: grid;
+  grid-template-areas:
+    "topbar topbar"
+    "map    sidebar";
+  grid-template-rows: 52px 1fr;
+  grid-template-columns: 1fr 240px;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .app-shell {
+    grid-template-areas:
+      "topbar"
+      "map";
+    grid-template-rows: 52px 1fr;
+    grid-template-columns: 1fr;
+  }
+}
