@@ -1,10 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import { MapSlot } from "@/components/layout/MapSlot";
 import { StoppedVehicleAlert } from "@/components/alerts/StoppedVehicleAlert";
 import { AccidentFlow } from "@/components/alerts/AccidentFlow";
 import { TrafficPanel } from "@/components/analytics/TrafficPanel";
+import { MapHUD } from "@/components/map/MapHUD";
 import { useVehicleMonitor } from "@/hooks/useVehicleMonitor";
 import { useTrafficPanelStore } from "@/store/trafficPanelStore";
 import type { Vehicle, Incident } from "@/components/map/types";
@@ -44,10 +46,30 @@ function MapPage() {
   useVehicleMonitor(MOCK_VEHICLES);
 
   const { open, close } = useTrafficPanelStore();
+  const [following, setFollowing] = useState(true);
 
   return (
     <MapSlot>
       <TrafficMap vehicles={MOCK_VEHICLES} incidents={MOCK_INCIDENTS} />
+
+      <MapHUD
+        speedKmh={62}
+        speedLimitKmh={80}
+        roadName="Litoral Km 18"
+        roadStatus="moderado"
+        segmentAvgSpeed={44}
+        etaMinutes={14}
+        hasActiveIncident={MOCK_INCIDENTS.length > 0}
+        nearbyAlert={{
+          id: "a-001",
+          message: "Vehículo detenido 280 m adelante",
+          distanceM: 280,
+        }}
+        isFollowingLocation={following}
+        onCenterLocation={() => setFollowing((v) => !v)}
+        onReport={() => {/* opens AccidentFlow */}}
+      />
+
       <StoppedVehicleAlert />
       <AccidentFlow />
       <TrafficPanel open={open} onClose={close} />
